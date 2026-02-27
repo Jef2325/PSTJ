@@ -1,54 +1,49 @@
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
-class Result {
 
-    /*
-     * Complete the 'miniMaxSum' function below.
-     *
-     * The function accepts INTEGER_ARRAY arr as parameter.
-     */
+// Write your Checker class here
 
-    public static void miniMaxSum(List<Integer> arr) {
-    // Write your code here
-      long total = 0;
-    long min = Long.MAX_VALUE;
-    long max = Long.MIN_VALUE;
+class Checker implements Comparator<Player> {
     
-    for (int num : arr) {
-        total += num;
-        min = Math.min(min, num);
-        max = Math.max(max, num);
+    @Override
+    public int compare(Player p1, Player p2) {
+        
+        // Sort by score in descending order
+        if (p2.score != p1.score) {
+            return p2.score - p1.score;
+        }
+        
+        // If scores are equal, sort by name in ascending order
+        return p1.name.compareTo(p2.name);
     }
+}
+class Player{
+    String name;
+    int score;
     
-    long minSum = total - max;
-    long maxSum = total - min;
-    
-    System.out.println(minSum + " " + maxSum);
-
+    Player(String name, int score){
+        this.name = name;
+        this.score = score;
     }
-
 }
 
-public class task_3 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+class t {
 
-        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-            .map(Integer::parseInt)
-            .collect(toList());
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
 
-        Result.miniMaxSum(arr);
+        Player[] player = new Player[n];
+        Checker checker = new Checker();
+        
+        for(int i = 0; i < n; i++){
+            player[i] = new Player(scan.next(), scan.nextInt());
+        }
+        scan.close();
 
-        bufferedReader.close();
+        Arrays.sort(player, checker);
+        for(int i = 0; i < player.length; i++){
+            System.out.printf("%s %s\n", player[i].name, player[i].score);
+        }
     }
 }

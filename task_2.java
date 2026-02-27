@@ -1,74 +1,35 @@
-import java.io.*;
-import java.util.*;
-interface PerformOperation {
- boolean check(int a);
-}
-class MyMath {
- public static boolean checker(PerformOperation p, int num) {
-  return p.check(num);
- }
-
-   // Write your code here
-   // Check if number is odd
-public PerformOperation isOdd() {
-    return (int a) -> a % 2 != 0;
-}
-
-// Check if number is prime
-public PerformOperation isPrime() {
-    return (int a) -> {
-        if (a <= 1) return false;
-        for (int i = 2; i <= Math.sqrt(a); i++) {
-            if (a % i == 0) return false;
-        }
-        return true;
-    };
-}
-
-// Check if number is palindrome
-public PerformOperation isPalindrome() {
-    return (int a) -> {
-        int original = a;
-        int reverse = 0;
-        while (a > 0) {
-            int digit = a % 10;
-            reverse = reverse * 10 + digit;
-            a /= 10;
-        }
-        return original == reverse;
-    };
-}
-}
+import java.util.Scanner;
 
 public class task_2 {
 
- public static void main(String[] args) throws IOException {
-  MyMath ob = new MyMath();
-  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-  int T = Integer.parseInt(br.readLine());
-  PerformOperation op;
-  boolean ret = false;
-  String ans = null;
-  while (T--> 0) {
-   String s = br.readLine().trim();
-   StringTokenizer st = new StringTokenizer(s);
-   int ch = Integer.parseInt(st.nextToken());
-   int num = Integer.parseInt(st.nextToken());
-   if (ch == 1) {
-    op = ob.isOdd();
-    ret = ob.checker(op, num);
-    ans = (ret) ? "ODD" : "EVEN";
-   } else if (ch == 2) {
-    op = ob.isPrime();
-    ret = ob.checker(op, num);
-    ans = (ret) ? "PRIME" : "COMPOSITE";
-   } else if (ch == 3) {
-    op = ob.isPalindrome();
-    ret = ob.checker(op, num);
-    ans = (ret) ? "PALINDROME" : "NOT PALINDROME";
+    public static String getSmallestAndLargest(String s, int k) {
+        
+        // Initialize with first substring of length k
+        String smallest = s.substring(0, k);
+        String largest = s.substring(0, k);
+        
+        // Loop through all possible substrings of length k
+        for (int i = 1; i <= s.length() - k; i++) {
+            String current = s.substring(i, i + k);
+            
+            if (current.compareTo(smallest) < 0) {
+                smallest = current;
+            }
+            
+            if (current.compareTo(largest) > 0) {
+                largest = current;
+            }
+        }
+        
+        return smallest + "\n" + largest;
+    }
 
-   }
-   System.out.println(ans);
-  }
- }
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        String s = scan.next();
+        int k = scan.nextInt();
+        scan.close();
+      
+        System.out.println(getSmallestAndLargest(s, k));
+    }
 }
