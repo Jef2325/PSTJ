@@ -1,50 +1,81 @@
 import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
 import java.util.stream.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 class Result {
 
-    public static List<Integer> compareTriplets(List<Integer> a, List<Integer> b) {
-        int alice = 0;
-        int bob = 0;
+    /*
+     * Complete the 'maxSubarray' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY arr as parameter.
+     */
 
-        for (int i = 0; i < 3; i++) {
-            if (a.get(i) > b.get(i)) {
-                alice++;
-            } else if (a.get(i) < b.get(i)) {
-                bob++;
-            }
-        }
-
-        return Arrays.asList(alice, bob);
+    public static List<Integer> maxSubarray(List<Integer> arr) {
+    // Write your code here
+     int maxCurrent = arr.get(0);
+    int maxGlobal = arr.get(0);
+    
+    for (int i = 1; i < arr.size(); i++) {
+        maxCurrent = Math.max(arr.get(i), maxCurrent + arr.get(i));
+        maxGlobal = Math.max(maxGlobal, maxCurrent);
     }
+    
+    int nonContiguousSum = 0;
+    int maxElement = arr.get(0);
+    
+    for (int num : arr) {
+        if (num > 0) {
+            nonContiguousSum += num;
+        }
+        maxElement = Math.max(maxElement, num);
+    }
+    
+    if (nonContiguousSum == 0) {
+        nonContiguousSum = maxElement;
+    }
+    
+    return Arrays.asList(maxGlobal, nonContiguousSum);
+
+    }
+
 }
 
 public class task3 {
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader =
-                new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bufferedWriter =
-                new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        List<Integer> a = Stream.of(bufferedReader.readLine().trim().split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
 
-        List<Integer> b = Stream.of(bufferedReader.readLine().trim().split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+        IntStream.range(0, t).forEach(tItr -> {
+            try {
+                int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        List<Integer> result = Result.compareTriplets(a, b);
+                List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                    .map(Integer::parseInt)
+                    .collect(toList());
 
-        bufferedWriter.write(
-                result.stream()
+                List<Integer> result = Result.maxSubarray(arr);
+
+                bufferedWriter.write(
+                    result.stream()
                         .map(Object::toString)
                         .collect(joining(" "))
-        );
-        bufferedWriter.newLine();
+                    + "\n"
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bufferedReader.close();
         bufferedWriter.close();

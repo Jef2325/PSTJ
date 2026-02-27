@@ -1,19 +1,16 @@
-class task_1 {
-    public boolean halvesAreAlike(String s) {
-        int n = s.length();
-        int mid = n / 2;
-        int count1 = 0, count2 = 0;
+class task1 {
+    public int maxSubArray(int[] nums) {
         
-        String vowels = "aeiouAEIOU";
+        int currentSum = nums[0];
+        int maxSum = nums[0];
         
-        for (int i = 0; i < mid; i++) {
-            if (vowels.indexOf(s.charAt(i)) != -1) count1++;
+        for (int i = 1; i < nums.length; i++) {
+            
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            
+            maxSum = Math.max(maxSum, currentSum);
         }
         
-        for (int i = mid; i < n; i++) {
-            if (vowels.indexOf(s.charAt(i)) != -1) count2++;
-        }
-        
-        return count1 == count2;
+        return maxSum;
     }
 }

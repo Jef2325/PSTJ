@@ -1,44 +1,32 @@
-import java.io.*;
-import java.util.*;
+class task5 {
+    public int myAtoi(String s) {
+        if (s == null || s.length() == 0) return 0;
+        
+        int i = 0, n = s.length();
+        while (i < n && s.charAt(i) == ' ') i++;
+        
+        if (i == n) return 0; 
 
-class Result {
-
-    public static String timeConversion(String s) {
-        String period = s.substring(s.length() - 2); 
-        String time = s.substring(0, 8);             
-
-        String[] parts = time.split(":");
-        int hour = Integer.parseInt(parts[0]);
-
-        if (period.equals("AM")) {
-            if (hour == 12) {
-                hour = 0;
-            }
-        } else {
-            if (hour != 12) {
-                hour += 12;
-            }
+        int sign = 1;
+        if (s.charAt(i) == '+') {
+            sign = 1;
+            i++;
+        } else if (s.charAt(i) == '-') {
+            sign = -1;
+            i++;
         }
-
-        return String.format("%02d:%s:%s", hour, parts[1], parts[2]);
-    }
-}
-
-public class task5 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader =
-                new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bufferedWriter =
-                new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-
-        String s = bufferedReader.readLine();
-
-        String result = Result.timeConversion(s);
-
-        bufferedWriter.write(result);
-        bufferedWriter.newLine();
-
-        bufferedReader.close();
-        bufferedWriter.close();
+        
+        long result = 0;
+        while (i < n && Character.isDigit(s.charAt(i))) {
+            int digit = s.charAt(i) - '0';
+            result = result * 10 + digit;
+  
+            if (sign * result > Integer.MAX_VALUE) return Integer.MAX_VALUE;
+            if (sign * result < Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            
+            i++;
+        }
+        
+        return (int)(sign * result);
     }
 }

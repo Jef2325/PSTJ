@@ -1,43 +1,72 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-class task2 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+class Result {
 
-        int T = sc.nextInt();   // number of test cases
-        while (T-- > 0) {
-            String s = sc.next();
+    /*
+     * Complete the 'birthday' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY s
+     *  2. INTEGER d
+     *  3. INTEGER m
+     */
 
-            int n = s.length();
-            int mid = n / 2;
-
-            String left = s.substring(0, mid);
-            String right;
-
-            if (n % 2 == 0) {
-                right = s.substring(mid);
-            } else {
-                right = s.substring(mid + 1);
-            }
-
-            int[] freq1 = new int[26];
-            int[] freq2 = new int[26];
-
-            for (char c : left.toCharArray()) {
-                freq1[c - 'a']++;
-            }
-
-            for (char c : right.toCharArray()) {
-                freq2[c - 'a']++;
-            }
-
-            if (Arrays.equals(freq1, freq2)) {
-                System.out.println("YES");
-            } else {
-                System.out.println("NO");
-            }
+    public static int birthday(List<Integer> s, int d, int m) {
+    
+    int count = 0;
+    
+    for (int i = 0; i <= s.size() - m; i++) {
+        
+        int sum = 0;
+        
+        for (int j = 0; j < m; j++) {
+            sum += s.get(i + j);
         }
+        
+        if (sum == d) {
+            count++;
+        }
+    }
+    
+    return count;
+}
 
-        sc.close();
+    }
+
+public class task2 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<Integer> s = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+            .map(Integer::parseInt)
+            .collect(toList());
+
+        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        int d = Integer.parseInt(firstMultipleInput[0]);
+
+        int m = Integer.parseInt(firstMultipleInput[1]);
+
+        int result = Result.birthday(s, d, m);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
