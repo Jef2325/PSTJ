@@ -1,35 +1,32 @@
-import java.util.Scanner;
-
-public class task_2 {
-
-    public static String getSmallestAndLargest(String s, int k) {
+class task_2 {
+    public boolean repeatedSubstringPattern(String s) {
+        int n = s.length();
+        int[] lps = buildLPS(s);
         
-        // Initialize with first substring of length k
-        String smallest = s.substring(0, k);
-        String largest = s.substring(0, k);
+        int len = lps[n - 1];
         
-        // Loop through all possible substrings of length k
-        for (int i = 1; i <= s.length() - k; i++) {
-            String current = s.substring(i, i + k);
-            
-            if (current.compareTo(smallest) < 0) {
-                smallest = current;
-            }
-            
-            if (current.compareTo(largest) > 0) {
-                largest = current;
+        return len > 0 && n % (n - len) == 0;
+    }
+    
+    private int[] buildLPS(String pattern) {
+        int n = pattern.length();
+        int[] lps = new int[n];
+        
+        int len = 0;
+        int i = 1;
+        
+        while (i < n) {
+            if (pattern.charAt(i) == pattern.charAt(len)) {
+                lps[i++] = ++len;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i++] = 0;
+                }
             }
         }
         
-        return smallest + "\n" + largest;
-    }
-
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        String s = scan.next();
-        int k = scan.nextInt();
-        scan.close();
-      
-        System.out.println(getSmallestAndLargest(s, k));
+        return lps;
     }
 }

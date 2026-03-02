@@ -13,62 +13,57 @@ import static java.util.stream.Collectors.toList;
 class Result {
 
     /*
-     * Complete the 'palindromeIndex' function below.
+     * Complete the 'stringSimilarity' function below.
      *
      * The function is expected to return an INTEGER.
      * The function accepts STRING s as parameter.
      */
 
-    public static int palindromeIndex(String s) {
-    // Write your code here
-    int left = 0;
-    int right = s.length() - 1;
+   public static int stringSimilarity(String s) {
+    int n = s.length();
+    int[] z = new int[n];
     
-    while (left < right) {
-        if (s.charAt(left) == s.charAt(right)) {
-            left++;
-            right--;
-        } else {
-            // Check if removing left makes palindrome
-            if (isPalindrome(s, left + 1, right)) {
-                return left;
-            }
-            // Otherwise remove right
-            if (isPalindrome(s, left, right - 1)) {
-                return right;
-            }
+    int left = 0, right = 0;
+    
+    for (int i = 1; i < n; i++) {
+        
+        if (i <= right) {
+            z[i] = Math.min(right - i + 1, z[i - left]);
+        }
+        
+        while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) {
+            z[i]++;
+        }
+        
+        if (i + z[i] - 1 > right) {
+            left = i;
+            right = i + z[i] - 1;
         }
     }
     
-    return -1; // Already palindrome
+    int total = n; // full string always matches itself
+    
+    for (int i = 1; i < n; i++) {
+        total += z[i];
+    }
+    
+    return total;
 }
-
-private static boolean isPalindrome(String s, int left, int right) {
-    while (left < right) {
-        if (s.charAt(left) != s.charAt(right)) {
-            return false;
-        }
-        left++;
-        right--;
-    }
-    return true;
-
-    }
 
 }
 
-public class task_7 {
+public class task_1 {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
 
-        IntStream.range(0, q).forEach(qItr -> {
+        IntStream.range(0, t).forEach(tItr -> {
             try {
                 String s = bufferedReader.readLine();
 
-                int result = Result.palindromeIndex(s);
+                int result = Result.stringSimilarity(s);
 
                 bufferedWriter.write(String.valueOf(result));
                 bufferedWriter.newLine();

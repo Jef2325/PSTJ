@@ -1,22 +1,28 @@
-import java.util.*;
-
-class task_6{
-    public String[] sortPeople(String[] names, int[] heights) {
-
-        int n = names.length;
-        Integer[] indices = new Integer[n];
-
-        for (int i = 0; i < n; i++) {
-            indices[i] = i;
+class task_6 {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        
+        if (s.length() < p.length()) return result;
+        
+        int[] pCount = new int[26];
+        int[] sCount = new int[26];
+        
+        for (char c : p.toCharArray()) {
+            pCount[c - 'a']++;
         }
-
-        Arrays.sort(indices, (a, b) -> Integer.compare(heights[b], heights[a]));
-
-        String[] result = new String[n];
-        for (int i = 0; i < n; i++) {
-            result[i] = names[indices[i]];
+        
+        int windowSize = p.length();
+        
+        for (int i = 0; i < s.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
+            if (i >= windowSize) {
+                sCount[s.charAt(i - windowSize) - 'a']--;
+            }
+            if (Arrays.equals(pCount, sCount)) {
+                result.add(i - windowSize + 1);
+            }
         }
-
+        
         return result;
     }
 }

@@ -1,49 +1,71 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
+class Result {
 
-// Write your Checker class here
+    /*
+     * Complete the 'twoStrings' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts following parameters:
+     *  1. STRING s1
+     *  2. STRING s2
+     */
 
-class Checker implements Comparator<Player> {
+    public static String twoStrings(String s1, String s2) {
+    // Write your code here
+      HashSet<Character> set = new HashSet<>();
     
-    @Override
-    public int compare(Player p1, Player p2) {
-        
-        // Sort by score in descending order
-        if (p2.score != p1.score) {
-            return p2.score - p1.score;
-        }
-        
-        // If scores are equal, sort by name in ascending order
-        return p1.name.compareTo(p2.name);
+    // Store all characters of s1 in a set
+    for (char c : s1.toCharArray()) {
+        set.add(c);
     }
-}
-class Player{
-    String name;
-    int score;
     
-    Player(String name, int score){
-        this.name = name;
-        this.score = score;
+    // Check if any character of s2 exists in set
+    for (char c : s2.toCharArray()) {
+        if (set.contains(c)) {
+            return "YES";
+        }
     }
+    
+    return "NO";
+
+    }
+
 }
 
-class t {
+public class task_3 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int n = scan.nextInt();
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        Player[] player = new Player[n];
-        Checker checker = new Checker();
-        
-        for(int i = 0; i < n; i++){
-            player[i] = new Player(scan.next(), scan.nextInt());
-        }
-        scan.close();
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                String s1 = bufferedReader.readLine();
 
-        Arrays.sort(player, checker);
-        for(int i = 0; i < player.length; i++){
-            System.out.printf("%s %s\n", player[i].name, player[i].score);
-        }
+                String s2 = bufferedReader.readLine();
+
+                String result = Result.twoStrings(s1, s2);
+
+                bufferedWriter.write(result);
+                bufferedWriter.newLine();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
